@@ -6,4 +6,4 @@ set -e
 IP="10.0.2.2"
 
 PAYLOAD=$(realpath "$@")
-echo "EDIT $PAYLOAD" | nc $IP 5115 -q 0
+echo "SHELL $PAYLOAD" | nc $IP 5115 -q 0
