@@ -5,5 +5,16 @@ set -e
 
 IP="10.0.2.2"
 
-PAYLOAD=$(realpath "$@")
-echo "EDIT $PAYLOAD" | nc $IP 5115 -q 0
+PAYLOAD=()
+for f in "$@"; do
+  if [ -r "$f" ]; then
+    PAYLOAD+=($(realpath "$f"))
+  elif [ -d $(dirname "$f") ]; then
+    DIR=$(realpath $(dirname "$f"))
+    PAYLOAD+=($DIR/$(basename "$f"))
+  else
+    PAYLOAD+=($(realpath "$f"))
+  fi
+done
+
+echo "EDIT ${PAYLOAD[@]}" | nc $IP 5115 -q 0
