@@ -17,4 +17,4 @@ for f in "$@"; do
   fi
 done
 
-echo "EDIT ${PAYLOAD[@]}" | nc $IP 5115 -q 0
+echo "EDIT ${PAYLOAD[@]}" | nc $IP 5115 -q 0 -w 1
