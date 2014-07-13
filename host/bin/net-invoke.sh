@@ -11,8 +11,8 @@ BASE="/home/$USER/"
 TRNS="A:/"
 
 ## NET_ - settings for external programs...
-NET_VISUAL?="/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe"
-NET_TERM?="mintty"
+NET_VISUAL=${NET_VISUAL:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}
+NET_TERM=${NET_TERM:-mintty}
 
 while [ true ]; do
   echo "Listening ...";
@@ -40,7 +40,7 @@ while [ true ]; do
       EDIT)
 
         # Invoke Sublime
-        "$VISUAL" "${FILES[@]}" &
+        "$NET_VISUAL" "${FILES[@]}" &
         ;;
 
       SHELL)
