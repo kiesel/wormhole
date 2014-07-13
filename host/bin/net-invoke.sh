@@ -3,8 +3,16 @@
 set -e 
 set -u 
 
-BASE="/opt/ui/data/dev/"
+## Translation settings
+# BASE - translate this:
+BASE="/home/$USER/"
+
+# TRNS - ... to that.
 TRNS="A:/"
+
+## NET_ - settings for external programs...
+NET_VISUAL?="/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe"
+NET_TERM?="mintty"
 
 while [ true ]; do
   echo "Listening ...";
@@ -32,7 +40,7 @@ while [ true ]; do
       EDIT)
 
         # Invoke Sublime
-        '/cygdrive/c/Program Files/Sublime Text 2/sublime_text.exe' "${FILES[@]}" &
+        "$VISUAL" "${FILES[@]}" &
         ;;
 
       SHELL)
@@ -43,7 +51,7 @@ while [ true ]; do
         fi
 
         echo "Opening shell at ${FILES[0]}"
-        cd $LOCATION && mintty &
+        cd $LOCATION && $NET_TERM &
         ;;
 
       EXPLORE)
