@@ -1,9 +1,7 @@
 #!/bin/bash
 
-set -u
-set -e
-
-IP=$(echo $SSH_CLIENT | awk '{print $1;}')
+set -e -u 
+source $(dirname $(realpath $0))/common.inc.sh
 
 PAYLOAD=$(realpath "$@")
-echo "SHELL $PAYLOAD" | nc $IP 5115 -q 0 -w 1
+SEND_COMMAND "SHELL $PAYLOAD"
