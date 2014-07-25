@@ -1,14 +1,15 @@
 #!/bin/bash
-
 set -e 
 set -u 
 
 ## Translation settings
 # BASE - translate this:
-BASE="/home/$USER/"
+BASE=${BASE:-"/home/$USER/"}
 
 # TRNS - ... to that.
-TRNS="A:/"
+TRNS=${TRNS:-"A:/"}
+
+PORT=${PORT:-5115}
 
 ## NET_ - settings for external programs...
 NET_VISUAL=${NET_VISUAL:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}
@@ -16,7 +17,7 @@ NET_TERM=${NET_TERM:-mintty}
 
 while [ true ]; do
   echo "Listening ...";
-  nc -l 127.0.0.1 5115 | while read -r -a 'RARG' ; do
+  (nc -p ${PORT} -l 127.0.0.1 || nc -l 127.0.0.1 ${PORT}) 2>/dev/null | while read -r -a 'RARG' ; do
 
     COMMAND=${RARG[0]}
     unset RARG[0]
@@ -30,38 +31,36 @@ while [ true ]; do
     FILES=()
     for FILE in "${RARG[@]}"; do
 
-      # DEBUG echo "+ $FILE";
       FILES+=($(echo "$FILE" | sed -r "s|$BASE|$TRNS|g"));
     done
-    # DEBUG echo "   > ${FILES[@]}"
-
 
     case $COMMAND in
       EDIT)
 
-        # Invoke Sublime
+        # Invoke editor
+        echo "EDIT > ${FILES[@]}"
         "$NET_VISUAL" "${FILES[@]}" &
         ;;
 
       SHELL)
         LOCATION="${FILES[0]}"
         if [ ! -d "$LOCATION" ]; then
-          echo "No directory: $LOCATION";
+          echo "Not a directory: $LOCATION";
           continue;
         fi
 
-        echo "Opening shell at ${FILES[0]}"
+        echo "SHELL > ${FILES[0]}"
         cd $LOCATION && $NET_TERM &
         ;;
 
       EXPLORE)
         LOCATION="${FILES[0]}"
         if [ ! -d "$LOCATION" ]; then
-          echo "No directory: $LOCATION";
+          echo "Not a directory: $LOCATION";
           continue;
         fi
 
-        echo "Opening explorer at $LOCATION"
+        echo "EXPLORER > $LOCATION"
         cygstart $LOCATION &
         ;;
 
