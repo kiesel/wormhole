@@ -18,7 +18,7 @@ case $MODE in
     echo "===> Installing wormhole guest into $TARGET"
     for i in net-invoke.sh; do
       echo "   > $i"
-      ln -sf $(realpath ./guest/bin/$i) $TARGET/$i
+      ln -sf $(realpath ./host/bin/$i) $TARGET/$i
     done
     ;;
 
