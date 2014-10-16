@@ -13,8 +13,6 @@ function HOST_IP {
 # Send given command via netcat
 # 
 function SEND_COMMAND {
-  local COMMAND=$1
-
-  echo "$COMMAND" | nc $(HOST_IP) 5115 -q 0 -w 1
+  echo "$@" | nc $(HOST_IP) 5115 -q 0 -w 1
 }
 
