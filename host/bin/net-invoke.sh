@@ -2,6 +2,8 @@
 set -e 
 set -u 
 
+PIDFILE="/var/run/$(basename $0).pid"
+
 ## Translation settings
 # BASE - translate this:
 BASE=${BASE:-${WORMHOLE_REMOTE:-"/home/$USER/"}}
@@ -14,6 +16,25 @@ PORT=${PORT:-${WORMHOLE_PORT:-5115}}
 ## NET_ - settings for external programs...
 NET_VISUAL=${NET_VISUAL:-${WORMHOLE_EDITOR:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}}
 NET_TERM=${NET_TERM:-${WORMHOLE_TERMINAL:-mintty}}
+
+if [ -r $PIDFILE ]; then
+  echo "$0 already running. Quitting.";
+  exit;
+fi
+
+# Ensure PID file is removed on program exit.
+trap "rm -f -- '$PIDFILE'" EXIT
+
+# Write pidfile
+echo $$ > "$PIDFILE"
+
+echo "===> Wormhole startup options"
+echo "Remote base:    ${BASE}"
+echo "Local base:     ${TRNS}"
+echo "Local port:     ${PORT}"
+echo "Local editor:   ${NET_VISUAL}"
+echo "Local terminal: ${NET_TERM}"
+echo
 
 while [ true ]; do
   echo -n "Listening @ "; date;
