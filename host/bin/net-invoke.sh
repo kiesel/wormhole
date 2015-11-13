@@ -41,7 +41,7 @@ while [ true ]; do
 
   (nc -p ${PORT} -l 127.0.0.1 || nc -l 127.0.0.1 ${PORT}) 2>/dev/null | while read -r -a 'RARG' ; do
     echo -n "<<< @ "; date;
-    echo "<<< ${RARG}"
+    echo "<<< ${RARG[*]}"
 
     COMMAND=${RARG[0]}
     unset RARG[0]
@@ -85,6 +85,17 @@ while [ true ]; do
         fi
 
         echo "EXPLORER > $LOCATION"
+        cygstart $LOCATION &
+        ;;
+
+      START)
+        LOCATION="${FILES[0]}"
+        if [ ! -r "$LOCATION" ]; then
+          echo "Not a file: $LOCATION";
+          continue;
+        fi
+
+        echo "START > $LOCATION"
         cygstart $LOCATION &
         ;;
 
