@@ -4,20 +4,23 @@ set -u
 
 ## Translation settings
 # BASE - translate this:
-BASE=${BASE:-"/home/$USER/"}
+BASE=${BASE:-${WORMHOLE_REMOTE:-"/home/$USER/"}}
 
 # TRNS - ... to that.
-TRNS=${TRNS:-"A:/"}
+TRNS=${TRNS:-${WORMHOLE_LOCAL:-"A:/"}}
 
-PORT=${PORT:-5115}
+PORT=${PORT:-${WORMHOLE_PORT:-5115}}
 
 ## NET_ - settings for external programs...
-NET_VISUAL=${NET_VISUAL:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}
-NET_TERM=${NET_TERM:-mintty}
+NET_VISUAL=${NET_VISUAL:-${WORMHOLE_EDITOR:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}}
+NET_TERM=${NET_TERM:-${WORMHOLE_TERMINAL:-mintty}}
 
 while [ true ]; do
-  echo "Listening ...";
+  echo -n "Listening @ "; date;
+
   (nc -p ${PORT} -l 127.0.0.1 || nc -l 127.0.0.1 ${PORT}) 2>/dev/null | while read -r -a 'RARG' ; do
+    echo -n "<<< @ "; date;
+    echo "<<< ${RARG}"
 
     COMMAND=${RARG[0]}
     unset RARG[0]
