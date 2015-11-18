@@ -28,7 +28,12 @@ This is simply achieved by placing a wormhole invoke into your `.bashrc` (or the
 ```sh
 if [ ! -r /var/run/net-invoke.sh.pid ]; then
   echo "Starting wormhole server ..."
-  WORMHOLE_REMOTE="/home/idev/" WORMHOLE_LOCAL="A:/" WORMHOLE_VISUAL="/cygdrive/c/Users/kiesel/OneDrive/applications/SublimeText3/sublime_text.exe" nohup $HOME/bin/net-invoke.sh </dev/null 2>&1 > $HOME/net-invoke.log &
+  export \
+    WORMHOLE_REMOTE="/home/idev/" \
+    WORMHOLE_LOCAL="A:/" \
+    WORMHOLE_EDITOR="/cygdrive/c/Users/kiesel/OneDrive/applications/SublimeText3/sublime_text.exe"
+
+    nohup $HOME/bin/net-invoke.sh </dev/null 2>&1 > $HOME/net-invoke.log &
   disown
 fi
 ```
@@ -40,7 +45,7 @@ This is the "server"; it must be configured before using it:
 * `WORMHOLE_REMOTE`: path to translate remote paths from
 * `WORMHOLE_LOCAL`: path to translate remote paths to
 * `WORMHOLE_PORT`: port to listen on (default `5115`)
-* `WORMHOLE_VISUAL`: path to visual text editor, defaults to `/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe`
+* `WORMHOLE_EDITOR`: path to visual text editor, defaults to `/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe`
 * `WORMHOLE_TERMINAL`: path to terminal program, defaults to `mintty`
 
 
