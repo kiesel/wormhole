@@ -8,7 +8,7 @@ TARGET=$HOME/bin
 case $MODE in
   "guest")
     echo "===> Installing wormhole guest into $TARGET"
-    for i in s expl term; do
+    for i in s expl term start; do
       echo "   > $i"
       ln -sf $(realpath ./guest/bin/$i) $TARGET/$i
     done
