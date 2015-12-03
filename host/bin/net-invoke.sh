@@ -26,9 +26,12 @@ lock() {
   eval "exec ${FD}>${LOCKFILE}"
 
   # Acquire lock
-  flock -n $FD \
-    && return 0 \
-    || return 1
+  flock -n $FD || return 1
+
+  trap "rm -f -- '${PIDFILE}'; echo; echo '> Caught SIGINT, exiting.' >&2" EXIT
+  echo $$ >> ${LOCKFILE}
+
+  return 0
 }
 
 eexit() {
