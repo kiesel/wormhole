@@ -60,70 +60,77 @@ main_loop() {
       echo -n "<<< @ "; date;
       echo "<<< ${RARG[*]}"
 
-      COMMAND=${RARG[0]}
-      unset RARG[0]
+      process_command $RARG
+    done
+  done
+}
 
-      if [ ${#RARG[@]} -lt 1 ]; then
-        echo "You need to give at least one argument to a command...";
+process_command() {
+  local ARGS="$1"
+
+  COMMAND=${ARGS[0]}
+  unset ARGS[0]
+
+  if [ ${#ARGS[@]} -lt 1 ]; then
+    echo "You need to give at least one argument to a command...";
+    continue;
+  fi
+
+  # Now translate to local filesystem path ...
+  FILES=()
+  for FILE in "${ARGS[@]}"; do
+
+    FILES+=($(echo "$FILE" | sed -r "s|$BASE|$TRNS|g"));
+  done
+
+  case $COMMAND in
+    EDIT)
+
+      # Invoke editor
+      echo "EDIT > ${FILES[@]}"
+      "$NET_VISUAL" "${FILES[@]}" &
+      ;;
+
+    SHELL)
+      LOCATION="${FILES[0]}"
+      if [ ! -d "$LOCATION" ]; then
+        echo "Not a directory: $LOCATION";
         continue;
       fi
 
-      # Now translate to local filesystem path ...
-      FILES=()
-      for FILE in "${RARG[@]}"; do
+      echo "SHELL > ${FILES[0]}"
+      cd $LOCATION && $NET_TERM &
+      ;;
 
-        FILES+=($(echo "$FILE" | sed -r "s|$BASE|$TRNS|g"));
-      done
+    EXPLORE)
+      LOCATION="${FILES[0]}"
+      if [ ! -d "$LOCATION" ]; then
+        echo "Not a directory: $LOCATION";
+        continue;
+      fi
 
-      case $COMMAND in
-        EDIT)
+      echo "EXPLORER > $LOCATION"
+      cygstart $LOCATION &
+      ;;
 
-          # Invoke editor
-          echo "EDIT > ${FILES[@]}"
-          "$NET_VISUAL" "${FILES[@]}" &
-          ;;
+    START)
+      LOCATION="${FILES[0]}"
+      if [ ! -r "$LOCATION" ]; then
+        echo "Not a file: $LOCATION";
+        continue;
+      fi
 
-        SHELL)
-          LOCATION="${FILES[0]}"
-          if [ ! -d "$LOCATION" ]; then
-            echo "Not a directory: $LOCATION";
-            continue;
-          fi
+      echo "START > $LOCATION"
+      cygstart $LOCATION &
+      ;;
 
-          echo "SHELL > ${FILES[0]}"
-          cd $LOCATION && $NET_TERM &
-          ;;
+    *)
+      echo "Unknown command $COMMAND";
+      ;;
+  esac
 
-        EXPLORE)
-          LOCATION="${FILES[0]}"
-          if [ ! -d "$LOCATION" ]; then
-            echo "Not a directory: $LOCATION";
-            continue;
-          fi
+  echo
 
-          echo "EXPLORER > $LOCATION"
-          cygstart $LOCATION &
-          ;;
-
-        START)
-          LOCATION="${FILES[0]}"
-          if [ ! -r "$LOCATION" ]; then
-            echo "Not a file: $LOCATION";
-            continue;
-          fi
-
-          echo "START > $LOCATION"
-          cygstart $LOCATION &
-          ;;
-
-        *)
-          echo "Unknown command $COMMAND";
-          ;;
-      esac
-
-      echo
-    done
-  done
 }
 
 main() {
