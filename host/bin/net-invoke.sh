@@ -6,16 +6,16 @@ PIDFILE="/var/run/$(basename $0).pid"
 
 ## Translation settings
 # BASE - translate this:
-BASE=${BASE:-${WORMHOLE_REMOTE:-"/home/$USER/"}}
+BASE=${WORMHOLE_REMOTE:-"/home/$USER/"}
 
 # TRNS - ... to that.
-TRNS=${TRNS:-${WORMHOLE_LOCAL:-"A:/"}}
+TRNS=${WORMHOLE_LOCAL:-"A:/"}
 
-PORT=${PORT:-${WORMHOLE_PORT:-5115}}
+PORT=${WORMHOLE_PORT:-5115}
 
 ## NET_ - settings for external programs...
-NET_VISUAL=${NET_VISUAL:-${WORMHOLE_EDITOR:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}}
-NET_TERM=${NET_TERM:-${WORMHOLE_TERMINAL:-mintty}}
+NET_VISUAL=${WORMHOLE_EDITOR:-'/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe'}
+NET_TERM=${WORMHOLE_TERMINAL:-mintty}
 
 if [ -r $PIDFILE ]; then
   echo "$0 already running. Quitting.";

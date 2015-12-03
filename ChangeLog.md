@@ -1,6 +1,11 @@
 Wormhole ChangeLog
 ==================
 
+v?.?.?
+------
+* Drop legacy host environment variable names
+  (@kiesel)
+
 v1.0.0
 ------
 * Finally released 2015-12-03
