@@ -65,4 +65,4 @@ s() {
 }
 
 # Publicly export functions
-export -f expl start term s
+export -f expl start term s >/dev/null

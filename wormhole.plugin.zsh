@@ -1,10 +1,10 @@
 
 # Detect host or guest mode:
-if [ -n ${WORMHOLE_REMOTE} -o \
-     -n ${WORMHOLE_LOCAL} -o \
-     -n ${WORMHOLE_EDITOR} -o \
-     -n ${WORMHOLE_TERM} -o \
-     -n ${WORMHOLE_PORT} ]; then
+if [ -n "${WORMHOLE_REMOTE}" -o \
+     -n "${WORMHOLE_LOCAL}" -o \
+     -n "${WORMHOLE_EDITOR}" -o \
+     -n "${WORMHOLE_TERM}" -o \
+     -n "${WORMHOLE_PORT}" ]; then
 
   nohup $(dirname $0)/host/bin/wormhole.sh >$HOME/wormhole.log 2>&1 &
   disown
