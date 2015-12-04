@@ -1,28 +1,42 @@
-# Determine IP to connect to by looking at
-# the SSH_CLIENT environment variable
-# 
-# If not set, quits with error
-wormhole_host_ip() {
-  echo $SSH_CLIENT | awk '{print $1;}'
-}
 
 # Send given command via netcat
 # 
 wormhole_send_command() {
-  echo "$@" | nc $(HOST_IP) 5115 -q 0 -w 1
+  if [ -z "$SSH_CLIENT" ]; then
+    echo "No SSH_CLIENT environment variable found. Cannot send wormhole command.";
+    return 1;
+  fi
+
+  REMOTEIP=$(awk '{print $1;}' <<< $SSH_CLIENT)
+  echo "$@" | nc $REMOTEIP 5115 -q 0 -w 1
 }
 
 expl() {
+  if [ $# -eq 0 ]; then
+    echo "expl <path>";
+    return 1;
+  fi
+
   PAYLOAD=$(realpath "$@")
   wormhole_send_command "EXPLORE $PAYLOAD"
 }
 
 start() {
+  if [ $# -eq 0 ]; then
+    echo "start <path>";
+    return 1;
+  fi
+
   PAYLOAD=$(realpath "$@")
   wormhole_send_command "START $PAYLOAD"
 }
 
 term() {
+  if [ $# -eq 0 ]; then
+    echo "term <path>";
+    return 1;
+  fi
+
   PAYLOAD=$(realpath "$@")
   wormhole_send_command "SHELL $PAYLOAD"
 }
