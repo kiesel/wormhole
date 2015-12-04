@@ -3,6 +3,12 @@ Wormhole ChangeLog
 
 v?.?.?
 ------
+* Rename host script to `wormhole.sh`
+  (@kiesel)
+
+* Use `flock` to protect against double run
+  (@kiesel)
+
 * Drop legacy host environment variable names
   (@kiesel)
 
