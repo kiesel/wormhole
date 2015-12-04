@@ -45,7 +45,7 @@ The configuration variables need to be set **prior** the source line in your .*r
 
 ## Usage
 
-On the host, when first opening a shell, the wormhole server starts; closing the shell will leave it running. Any further shell starts will not start further wormhole processes *unless* the running process has died.
+On the host, when first opening a shell, the wormhole server starts; closing the shell will leave it running. Any further shell starts will not start further wormhole processes *unless* the running process has died. The server will write a logfile to `$(HOME)/wormhole.log`.
 
 On the guest, the following commands are available:
 
