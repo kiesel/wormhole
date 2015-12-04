@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e -u 
-source $(dirname $(realpath $0))/common.inc.sh
-
-PAYLOAD=$(realpath "$@")
-SEND_COMMAND "EXPLORE $PAYLOAD"

@@ -7,53 +7,51 @@ Wormhole is here to fix that.
 
 ## Installation
 
-* On the host, run
+You'll need to install wormhole on both, the guest and the host system. There are multiple ways to do it:
 
-    ./install.sh host
+### Installation via antigen
 
-* On the guest, run
+* `antigen bundle kiesel/wormhole`
 
-    ./install.sh guest
+### Installation via zgen
 
-This will symlink the needed files into `$HOME/bin`.
+* Put `zgen load kiesel/wormhole` into the *zgen* block in your `.zshrc`
 
-## Usage
+### Manual installation (or oh-my-zsh)
 
-On the host, you must *always* run `net-invoke.sh`:
-
-    ./bin/net-invoke.sh
-
-This is simply achieved by placing a wormhole invoke into your `.bashrc` (or the respective file for your shell):
+Clone the git repository to some place; for oh-my-zsh, put it into $(ZSH_CUSTOM)
 
 ```sh
-if [ ! -r /var/run/net-invoke.sh.pid ]; then
-  echo "Starting wormhole server ..."
-  export \
-    WORMHOLE_REMOTE="/home/idev/" \
-    WORMHOLE_LOCAL="A:/" \
-    WORMHOLE_EDITOR="/cygdrive/c/Users/kiesel/OneDrive/applications/SublimeText3/sublime_text.exe"
-
-    nohup $HOME/bin/net-invoke.sh </dev/null 2>&1 > $HOME/net-invoke.log &
-  disown
-fi
+git clone https://github.com/kiesel/wormhole.git
 ```
 
-* Invoking with `nohup` disconnects the job from a `SIGHUP` signal in case your shell closes; this keeps the process on running
-* Calling `disown` is necessary for zsh - so the process and its childs are disconnected and zsh won't complain about running background jobs - YMMV.
+Then, source the `wormhome.plugin.zsh` entrypoint script from your `.zshrc` or `.bashrc`; if you've put the checkout into the $(ZSH_CUSTOM) directory, you can omit the manual sourcing, oh-my-zsh will do it for you:
 
-This is the "server"; it must be configured before using it:
+```sh
+source $(HOME)/path/to/wormhole/wormhole.plugin.zsh
+```
+
+## Configuration
+
+Only the **host** part needs configuration! There are several environment variables that need to be configured (some have defaults):
+
 * `WORMHOLE_REMOTE`: path to translate remote paths from
 * `WORMHOLE_LOCAL`: path to translate remote paths to
 * `WORMHOLE_PORT`: port to listen on (default `5115`)
 * `WORMHOLE_EDITOR`: path to visual text editor, defaults to `/cygdrive/c/Program Files/Sublime Text 3/sublime_text.exe`
 * `WORMHOLE_TERMINAL`: path to terminal program, defaults to `mintty`
 
+The configuration variables need to be set **prior** the source line in your .*rc file.
+
+## Usage
+
+On the host, when first opening a shell, the wormhole server starts; closing the shell will leave it running. Any further shell starts will not start further wormhole processes *unless* the running process has died. The server will write a logfile to `$(HOME)/wormhole.log`.
 
 On the guest, the following commands are available:
 
-* `s arg1 [arg2 ...]`: open an editor w/ the given argument(s)
-* `term path`: open a new terminal window in path *path*
-* `expl path`: open an *Explorer* window in path *path*
-* `start path`: start the file at *path* (like double-clicking it in Explorer)
+* `s <path> [...]`: open an editor w/ the given argument(s)
+* `term <path>`: open a new terminal window in path *path*
+* `expl <path>`: open an *Explorer* window in path *path*
+* `start <path>`: start the file at *path* (like double-clicking it in Explorer)
 
 
