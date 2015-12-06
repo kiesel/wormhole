@@ -2,7 +2,7 @@
 set -e 
 set -u 
 
-PIDFILE="/var/run/net-invoke.pid"
+PIDFILE="/var/run/wormhole.pid"
 LOCK_FD=9 # arbitrary file descriptor
 
 ## Translation settings
@@ -28,7 +28,7 @@ lock() {
   # Acquire lock
   flock -n $FD || return 1
 
-  trap "rm -f -- '${PIDFILE}'; echo; echo '> Caught SIGINT, exiting.' >&2" EXIT
+  trap "rm -f -- '${PIDFILE}'; echo; echo '*** Caught SIGINT, exiting.' >&2" EXIT
   echo $$ >> ${LOCKFILE}
 
   return 0
