@@ -3,6 +3,12 @@ Wormhole ChangeLog
 
 v?.?.?
 ------
+* Provide zsh plugin for starting server / client
+  (@kiesel)
+
+* Rewrite guest scripts as shell functions
+  (@kiesel)
+
 * Rename host script to `wormhole.sh`
   (@kiesel)
 
