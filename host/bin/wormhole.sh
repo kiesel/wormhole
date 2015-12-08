@@ -44,6 +44,7 @@ eexit() {
 print_configuration() {
   echo "===> Wormhole startup options"
 
+  echo "Process ID:     $$"
   echo "Remote base:    ${BASE}"
   echo "Local base:     ${TRNS}"
   echo "Local port:     ${PORT}"
@@ -137,7 +138,7 @@ process_command() {
 }
 
 main() {
-  lock $PIDFILE || eexit "Cannot acquire lock, giving up."
+  lock $PIDFILE || eexit "Cannot acquire lock, giving up (PID= $$)."
 
   print_configuration
   main_loop

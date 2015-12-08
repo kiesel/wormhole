@@ -6,7 +6,7 @@ if [ -n "${WORMHOLE_REMOTE}" -o \
      -n "${WORMHOLE_TERM}" -o \
      -n "${WORMHOLE_PORT}" ]; then
 
-  nohup $(dirname $0)/host/bin/wormhole.sh </dev/null >$HOME/wormhole.log 2>&1 &
+  nohup $(dirname $0)/host/bin/wormhole.sh </dev/null >> $HOME/wormhole.log 2>&1 &
   disown
 
 else
