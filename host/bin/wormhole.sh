@@ -103,7 +103,7 @@ process_command() {
       LOCATION="${FILES[0]}"
       if [ ! -d "$LOCATION" ]; then
         echo "Not a directory: $LOCATION";
-        return 1;
+        return;
       fi
 
       cd $LOCATION && $NET_TERM &
@@ -113,7 +113,7 @@ process_command() {
       LOCATION="${FILES[0]}"
       if [ ! -d "$LOCATION" ]; then
         echo "Not a directory: $LOCATION";
-        return 1;
+        return;
       fi
 
       cygstart $LOCATION &
@@ -123,6 +123,7 @@ process_command() {
       LOCATION="${FILES[0]}"
       if [ ! -r "$LOCATION" ]; then
         echo "Not a file: $LOCATION";
+        return;
       fi
 
       cygstart $LOCATION &
@@ -130,7 +131,6 @@ process_command() {
 
     *)
       echo "Unknown command $COMMAND";
-      return 1;
       ;;
   esac
 
