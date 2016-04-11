@@ -17,7 +17,7 @@ expl() {
   fi
 
   PAYLOAD=$(realpath "$@")
-  wormhole_send_command "EXPLORE $PAYLOAD"
+  wormhole_send_command "invoke explore $PAYLOAD"
 }
 
 start() {
@@ -27,7 +27,7 @@ start() {
   fi
 
   PAYLOAD=$(realpath "$@")
-  wormhole_send_command "START $PAYLOAD"
+  wormhole_send_command "invoke start $PAYLOAD"
 }
 
 term() {
@@ -37,7 +37,7 @@ term() {
   fi
 
   PAYLOAD=$(realpath "$@")
-  wormhole_send_command "SHELL $PAYLOAD"
+  wormhole_send_command "invoke shell $PAYLOAD"
 }
 
 s() {
@@ -60,7 +60,7 @@ s() {
     fi
   done
 
-  wormhole_send_command "EDIT ${PAYLOAD[@]}"
+  wormhole_send_command "invoke sublime ${PAYLOAD[@]}"
 }
 
 # Publicly export functions
