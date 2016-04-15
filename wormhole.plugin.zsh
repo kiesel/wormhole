@@ -1,43 +1,44 @@
 # Send given command via netcat
 #
 wormhole_send_command() {
-  if [ -z "$SSH_CLIENT" ]; then
-    echo "No SSH_CLIENT environment variable found. Cannot send wormhole command.";
-    return 1;
-  fi
+  RESPONSE=$(echo "$@" | netcat 127.0.0.1 5115 -w 1)
 
-  REMOTEIP=$(awk '{print $1;}' <<< $SSH_CLIENT)
-  echo "$@" | nc $REMOTEIP 5115 -q 0 -w 1
+  # if [ "[OK] " != "${RESPONSE:0:5}" ]; then
+  echo $RESPONSE
+  # fi
 }
 
 expl() {
-  if [ $# -eq 0 ]; then
-    echo "expl <path>";
-    return 1;
-  fi
-
-  PAYLOAD=$(realpath "$@")
-  wormhole_send_command "invoke explore $PAYLOAD"
+  wh explore $@
 }
 
 start() {
-  if [ $# -eq 0 ]; then
-    echo "start <path>";
-    return 1;
-  fi
-
-  PAYLOAD=$(realpath "$@")
-  wormhole_send_command "invoke start $PAYLOAD"
+  wh start $@
 }
 
 term() {
-  if [ $# -eq 0 ]; then
-    echo "term <path>";
-    return 1;
+  wh shell $@
+}
+
+wh() {
+  SUBCMD=$1
+  shift
+
+  PAYLOAD=""
+  if [ $# -gt 0 ]; then
+    PAYLOAD=$(realpath "$@")
   fi
 
-  PAYLOAD=$(realpath "$@")
-  wormhole_send_command "invoke shell $PAYLOAD"
+  case $SUBCMD in
+    version | reload | exit)
+      wormhole_send_command "$SUBCMD"
+      ;;
+
+    *)
+      wormhole_send_command "invoke $SUBCMD $PAYLOAD"
+      ;;
+
+  esac
 }
 
 s() {
@@ -64,4 +65,4 @@ s() {
 }
 
 # Publicly export functions
-export -f expl start term s >/dev/null
+export -f wh expl start term s >/dev/null
