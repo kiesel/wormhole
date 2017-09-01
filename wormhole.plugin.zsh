@@ -41,7 +41,10 @@ wh() {
   esac
 }
 
-s() {
+wormhole_send_pathargs_command() {
+  CMD=$1
+  shift
+
   PAYLOAD=()
   for f in "$@"; do
 
@@ -61,8 +64,16 @@ s() {
     fi
   done
 
-  wormhole_send_command "invoke sublime ${PAYLOAD[@]}"
+  wormhole_send_command "invoke ${CMD} ${PAYLOAD[@]}"
+}
+
+s() {
+  wormhole_send_pathargs_command sublime "$@"
+}
+
+code() {
+  wormhole_send_pathargs_command code "$@"
 }
 
 # Publicly export functions
-export -f wh expl start term s >/dev/null
+export -f wh expl start term s code >/dev/null
